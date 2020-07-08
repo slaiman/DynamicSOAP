@@ -3,6 +3,7 @@ package dynamicsoap.service;
 import dynamicsoap.GenericModel.OperationParameters;
 import dynamicsoap.GenericModel.Operations;
 import dynamicsoap.GenericModel.WebService;
+import dynamicsoap.mapper.UIParamMapper;
 import dynamicsoap.repository.OperationParametersRepository;
 import dynamicsoap.repository.OperationsRepository;
 import dynamicsoap.repository.WebServiceRepository;
@@ -104,8 +105,9 @@ public class ParserServiceImpl implements  ParserService {
                     {
                         //get the name of parameter in class
                         String fieldName = opName.startsWith("set") ? opName.substring(3).toUpperCase():"";
-                        //get the parameter value by it's name
-                        Object Value = paramValues.get(fieldName);
+                        //map the UI parameters into model parameters and get the value
+                        UIParamMapper mapper = new UIParamMapper();
+                        Object Value = mapper.map(paramValues,parameters.get(i).getParamMap());
                         //if parameter is not enum get the primitive value
                         if(!name.endsWith("Enum"))  Value = ParseValue(Value,name);
                         //if parameter is enum
